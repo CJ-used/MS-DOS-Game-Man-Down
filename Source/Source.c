@@ -137,6 +137,9 @@ void Start(void)
 	}
 	return;
 }
+/**
+* 游戏结束之后的菜单选择.
+*/
 
 bool Menu(void)
 {
@@ -149,7 +152,9 @@ bool Menu(void)
 	scanf("%c",&ch);
 	return (ch == 'Y' || ch == 'y'); 
 }
-
+/**
+* 初始化一些游戏场景数据.
+*/
 void Begin(void)
 {
 	Man.x = 5;
@@ -165,7 +170,10 @@ void Begin(void)
 	Board[3].y = 13;
 	Times_++;
 }
-
+/**
+* 随机生成一个“石板”信息填充到指定结构.
+* @N 被填充结构的下标.
+*/
 void RandBoard(int N)
 {
 	do{
@@ -237,7 +245,10 @@ void Play(void)
 	}
 	return;
 }
-
+/**
+* 检测玩家是否站到了石板上，如果是，在Man结构中的Stop标记为true.
+* @return 如果是，返回该石板结构下标.如果不是，返回-1.
+*/
 int CollisionDetection(void)
 {
 	int x,y,num;
@@ -261,7 +272,9 @@ int CollisionDetection(void)
 	Man.Stop = false;
 	return -1;
 }
-
+/**
+* 显示游戏场景.
+*/
 void Display(void)
 {
 	int N;
