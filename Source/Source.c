@@ -5,6 +5,19 @@
 #include <stdbool.h>
 #include <conio.h>
 
+/*****************************控制台颜色函数宏定义*****************************/
+#define RED SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED)
+#define GREEN SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN)
+#define BLUE SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_BLUE)
+#define GREENPLUS SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_INTENSITY)
+#define REDPLUS SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED|FOREGROUND_INTENSITY)
+#define BLUEPLUS SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_BLUE|FOREGROUND_INTENSITY)
+#define YELLO SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_RED|FOREGROUND_INTENSITY)
+#define INDIG SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY)
+#define MagentaPlus SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED|FOREGROUND_BLUE|FOREGROUND_INTENSITY)
+#define White SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED|FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY)
+#define Other SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),FOREGROUND_RED&FOREGROUND_GREEN|FOREGROUND_BLUE|FOREGROUND_INTENSITY)
+
 /*长宽大小*/
 #define MAX 15
 #define BoardLEN 5 
@@ -16,23 +29,24 @@
 #define Move 3
 #define HP_PLUS 4 
 
+void Start(void);                       /*开始选择*/
 void gotoxy(int,int);
-bool Menu(void); 					       	/*选择菜单*/
-void Begin(void);						      /*初始化场景*/
-void RandBoard(int);					    /*随机生成踏板*/
-void Play(void);						      /*玩家操作*/
-void Display(void); 				    	/*显示*/
+bool Menu(void); 						/*选择菜单*/
+void Begin(void);						/*初始化场景*/
+void RandBoard(int);					/*随机生成踏板*/
+void Play(void);						/*玩家操作*/
+void Display(void); 					/*显示*/
 unsigned int FindMax(void);				/*找出最下面的踏板的y坐标*/
 bool ManMoveDetectionA(void);			/*是否进行移动的检测*/
 bool ManMoveDetectionD(void);
 bool CoordinateComparisonOfMoving(void);/*碰撞踏板的检测*/
-int CollisionDetection(void);			  /*踩踏碰撞检测*/
+int CollisionDetection(void);			/*踩踏碰撞检测*/
 void GenerationDetection(void);			/*生成函数*/
 void SomethingWillHappen(int);			/*踩踏板事件生成*/
-bool IsDieDetection(void); 			  	/*死亡检测*/
+bool IsDieDetection(void); 				/*死亡检测*/
  
 int HP = 100;        /*生命*/
-int Score = 0;		   /*分数*/
+int Score = 0;		 /*分数*/
 int Times = 0;
 int Times_ = 0; 
 
@@ -55,6 +69,7 @@ struct BOARD
 
 int main(void)
 {
+	Start(); 
 	THE_ORIGIN_SAGA:
 	srand((unsigned)(time(0)));
 	Begin();
@@ -66,14 +81,56 @@ int main(void)
 	return 0;
 }
 
+void Start(void)
+{
+	char ch;
+	printf("***********************是男人就下一百层字符版***********************\n\n");
+	printf("                          a.玩法介绍.\n");
+	printf("                          b.开始游戏.\n\n");
+	N:
+	scanf("%c",&ch);
+	switch(ch)
+	{
+		case 'a':
+		{
+			system("cls");
+			printf("方向控制:  ←:A  →:D  \n\n");
+			printf("石板种类:\n");
+			REDPLUS;	
+			printf("^^^^^^");
+			printf("  尖刺\n\n");
+			BLUEPLUS;
+			printf("------");
+			printf("  普通石板\n\n");
+			YELLO;
+			printf("~~~~~~");
+			printf("  易碎石板\n\n");
+			White; 
+			printf("******");
+			printf("  传送带\n\n");
+			GREENPLUS;
+			printf("++++++");
+			printf("  加血石板\n\n");
+			printf("玩法: 上层尖刺不断向下移动，玩家通过控制人物，避免被尖刺扎伤，又要避免掉入深渊。\n");
+			getchar();
+			getchar();  
+			break;	
+		}
+		case 'b':return;break;
+		default:goto N;break; 
+	}
+	return;
+}
+
 bool Menu(void)
 {
 	char ch;
 	Score = Times = Times_ = 0;
+	White;
 	system("cls");
-	printf("游戏结束！\n得分:%d\n",Score);
-	printf("累计踩踏石板次数:%d\n",Times);
-	printf("累计石板生成次数:%d\n",Times_);
+	printf("游戏结束！\n得分:%d\n\n",Score);
+	printf("累计踩踏石板次数:%d\n\n",Times);
+	printf("累计石板生成次数:%d\n\n",Times_);
 	printf("\n\n继续游戏？(Y键继续,其余任意键退出):");
 	scanf("%c",&ch);
 	return (ch == 'Y' || ch == 'y'); 
@@ -161,7 +218,7 @@ void Play(void)
 		}
 		Display();
 		Score += 10;
-		Sleep(1000);
+		Sleep(800);
 	}
 	return;
 }
@@ -195,14 +252,17 @@ void Display(void)
 {
 	int N;
 	gotoxy(Man.x+10,Man.y+1);
+	White;
 	printf("QAQ");
 	gotoxy(20+10,0+1);
 	printf("HP:%d",HP);
 	gotoxy(20+10,1+1);
 	printf("Score:%d",Score);
 	gotoxy(10,MAX+1);
+	INDIG;
 	printf("---------------");
 	gotoxy(10,0);
+	White; 
 	printf("^^^^^^^^^^^^^^^"); 
 	for(N = 0;N<4;N++)
 	{ 
@@ -214,27 +274,32 @@ void Display(void)
 		switch(Board[N].style)
 		{
 			case Sinpe:
-			{	
+			{
+				REDPLUS;	
 				printf("^^^^^^");
 				break;
 			}
 			case Hard:
 			{
+				BLUEPLUS;
 				printf("------");
 				break;
 			}
 			case Fragile:
 			{
+				YELLO;
 				printf("~~~~~~");
 				break;
 			}
 			case Move:
 			{
+				White; 
 				printf("******");
 				break;
 			}
 			case HP_PLUS:
 			{
+				GREENPLUS;
 				printf("++++++");
 				break; 
 			} 
@@ -265,7 +330,7 @@ bool CoordinateComparisonOfMoving(void)
 				{
 					return true;
 				}
-				else if(Man.x-1 == Board[num].rightx && Man.y == Board[num].y)
+				else if(Man.x == Board[num].rightx && Man.y == Board[num].y)
 				{
 					return true;
 				}
