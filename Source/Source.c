@@ -29,6 +29,7 @@
 #define Move 3
 #define HP_PLUS 4 
 
+void HideCursor(void); 
 void Start(void);                       /*开始选择*/
 void gotoxy(int,int);
 bool Menu(void); 						/*选择菜单*/
@@ -47,8 +48,8 @@ bool IsDieDetection(void); 				/*死亡检测*/
  
 int HP = 100;        /*生命*/
 int Score = 0;		 /*分数*/
-int Times = 0;
-int Times_ = 0; 
+int Times_ = 0;
+unsigned long Speed = 500; 
 
 /*人物位置信息*/
 struct MAN
@@ -68,7 +69,8 @@ struct BOARD
 }Board[4]; 
 
 int main(void)
-{
+{	
+	HideCursor();
 	Start(); 
 	THE_ORIGIN_SAGA:
 	srand((unsigned)(time(0)));
@@ -84,14 +86,17 @@ int main(void)
 void Start(void)
 {
 	char ch;
+	int speed_temp;
 	printf("***********************是男人就下一百层字符版***********************\n\n");
-	printf("                          a.玩法介绍.\n");
-	printf("                          b.开始游戏.\n\n");
+	printf("                          a.开始游戏.\n");
+	printf("                          b.玩法介绍.\n");
+	printf("                          c.设置难度.\n\n");
 	N:
 	scanf("%c",&ch);
 	switch(ch)
 	{
-		case 'a':
+		case 'B':
+		case 'b': 
 		{
 			system("cls");
 			printf("方向控制:  ←:A  →:D  \n\n");
@@ -116,8 +121,19 @@ void Start(void)
 			getchar();  
 			break;	
 		}
-		case 'b':return;break;
-		default:goto N;break; 
+		case 'A':
+		case 'a':return;break;
+		case 'C':
+		case 'c':
+		{
+			do{
+				printf("请输入间隔速度(毫秒):");
+				scanf("%d",&speed_temp);
+			}while(speed_temp < 0);
+			Speed = (unsigned int)(speed_temp);
+			break;
+		}
+		default:goto N;break;
 	}
 	return;
 }
@@ -125,12 +141,10 @@ void Start(void)
 bool Menu(void)
 {
 	char ch;
-	Score = Times = Times_ = 0;
 	White;
 	system("cls");
 	printf("游戏结束！\n得分:%d\n\n",Score);
-	printf("累计踩踏石板次数:%d\n\n",Times);
-	printf("累计石板生成次数:%d\n\n",Times_);
+	printf("累计石板生成次数:%d\n\n",Times_+4);
 	printf("\n\n继续游戏？(Y键继续,其余任意键退出):");
 	scanf("%c",&ch);
 	return (ch == 'Y' || ch == 'y'); 
@@ -160,6 +174,7 @@ void RandBoard(int N)
 	}while(Board[N].rightx>MAX); 
 	Board[N].style = rand()%5;
 	Board[N].y = FindMax() + 4;
+	Times_++;
 }
 
 void Play(void)
@@ -217,8 +232,8 @@ void Play(void)
 			return;
 		}
 		Display();
-		Score += 10;
-		Sleep(800);
+		Score++;
+		Sleep((DWORD)(Speed));
 	}
 	return;
 }
@@ -237,7 +252,6 @@ int CollisionDetection(void)
 					if(Man.x+2 >= Board[num].leftx && Man.x <= Board[num].rightx)
 					{
 						Man.Stop = true;
-						Times++;
 						return num;
 					}
 				}
@@ -364,11 +378,6 @@ unsigned int FindMax(void)
 
 void SomethingWillHappen(int num)
 {
-	/*#define Sinpe 0
-	#define Hard 1
-	#define Fragile 2
-	#define Move 3
-	#define HP_PLUS 4 */
 	if(num >= 0)
 	{ 
 		switch(Board[num].style)
@@ -392,6 +401,10 @@ void SomethingWillHappen(int num)
 			case HP_PLUS:
 			{
 				HP+=20;
+				if(HP>100)
+				{
+					HP = 100;
+				}
 				break;
 			} 
 		}
@@ -413,4 +426,10 @@ void gotoxy(int x, int y)
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     SetConsoleCursorPosition(hOut, pos);
     return;
+}
+
+void HideCursor(void)
+{
+	CONSOLE_CURSOR_INFO cursor_info = {1, 0}; 
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursor_info);
 }
