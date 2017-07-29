@@ -1,3 +1,3 @@
 # MS-DOS-Game-Man-Down
 《是男人就下一百层》C语言控制台版……
-[pic1][https://github.com/vmpy/MS-DOS-Game-Man-Down/blob/master/Picture/360%E6%88%AA%E5%9B%BE20170729111209524.jpg]
+![pic1][https://github.com/vmpy/MS-DOS-Game-Man-Down/blob/master/Picture/360%E6%88%AA%E5%9B%BE20170729111209524.jpg]
