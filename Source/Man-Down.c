@@ -30,23 +30,23 @@
 #define Move 3
 #define HP_PLUS 4 
 
-void HideCursor(void); 
-void Start(void);                       /*开始选择*/
-void gotoxy(int,int);
+void HideCursor(void); 						/*隐藏光标*/
+void Start(void);                       			/*开始选择*/
+void gotoxy(int,int);						/*移动光标*/
 bool Menu(void); 						/*选择菜单*/
 void Begin(void);						/*初始化场景*/
-void RandBoard(int);					/*随机生成踏板*/
+void RandBoard(int);						/*随机生成踏板*/
 void Play(void);						/*玩家操作*/
-void Display(void); 					/*显示*/
-unsigned int FindMax(void);				/*找出最下面的踏板的y坐标*/
-bool ManMoveDetectionA(void);			/*是否进行移动的检测*/
+void Display(void); 						/*显示*/
+unsigned int FindMax(void);					/*找出最下面的踏板的y坐标*/
+bool ManMoveDetectionA(void);					/*是否进行移动的检测*/
 bool ManMoveDetectionD(void);
-bool CoordinateComparisonOfMoving(void);/*碰撞踏板的检测*/
-int CollisionDetection(void);			/*踩踏碰撞检测*/
-void GenerationDetection(void);			/*生成函数*/
-void SomethingWillHappen(int);			/*踩踏板事件生成*/
-bool IsDieDetection(void); 				/*死亡检测*/
- 
+bool CoordinateComparisonOfMoving(void);			/*碰撞踏板的检测*/
+int CollisionDetection(void);					/*踩踏碰撞检测*/
+void GenerationDetection(void);					/*生成踏板函数*/
+void SomethingWillHappen(int);					/*踩踏板事件生成*/
+bool IsDieDetection(void); 					/*死亡检测*/
+
 int HP = 100;        /*生命*/
 int Score = 0;		 /*分数*/
 int Times_ = 0;
